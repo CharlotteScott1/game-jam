@@ -186,6 +186,9 @@ def main():
         prevScore = score
         score = depositLeaves(ants, score)
 
+        # Remove deleted ants
+        ants = [ant for ant in ants if ant.alive]
+
         for i in range((score // 5) - (prevScore//5)):
             newAnt = Ant(len(ants)-1, following=ants[-1])
             ants[-1].in_trail = newAnt
