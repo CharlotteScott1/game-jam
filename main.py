@@ -171,6 +171,8 @@ def main():
                 ant.move_forward()
             if ant.alive:
                 ant.draw(screen)
+                if ant.following:
+                    print(f"{ant.id} following {ant.following.id}")
             # Update display
 
         for mob in mobs:
