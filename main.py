@@ -29,7 +29,7 @@ WHITE = (255, 255, 255)
 CIRCLE_COLOR = (0, 255, 0)
 GREEN = (55, 153, 35)
 BROWN = (77, 39, 39)
-NUM_ANTS = 5
+NUM_ANTS = 50
 NUM_MOBS = 14
 
 # Initialize screen
@@ -171,8 +171,7 @@ def main():
                 ant.move_forward()
             if ant.alive:
                 ant.draw(screen)
-                if ant.following:
-                    print(f"{ant.id} following {ant.following.id}")
+
             # Update display
 
         for mob in mobs:
@@ -181,6 +180,7 @@ def main():
 
         if not bob.alive:
             bob = bob.in_trail
+            bob.player_controlled = True
 
         pickUpLeaves(ants, leafPiles)
         prevScore = score

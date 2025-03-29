@@ -52,6 +52,17 @@ class Ant:
         rect = rotated_image.get_rect(center=(self.x, self.y))
         screen.blit(rotated_image, rect.topleft)
 
+        # Draw a line to the ant it's following
+        # if self.following:
+        #     pygame.draw.line(screen, (0, 255, 0), (self.x, self.y),
+        #                      (self.following.x, self.following.y), 2)
+
+        # # Draw the ant's ID near its position
+        # font = pygame.font.Font(None, 24)
+        # text_surface = font.render(str(self.id), True, (255, 255, 255))
+        # text_rect = text_surface.get_rect(center=(self.x, self.y + 30))
+        # screen.blit(text_surface, text_rect.topleft)
+
         # If the ant is carrying something, draw a leaf nearby
         if self.isCarrying:
 
