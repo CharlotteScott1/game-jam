@@ -58,12 +58,12 @@ def spawnLeaves(leafPiles):
 def drawLeaves(leafPiles):
 
     for pile in leafPiles:
-        
+
         leaf = pygame.image.load("leavesResized.png")
         leaf = pygame.transform.scale(leaf, (pile[0].width, pile[0].height))
         screen.blit(leaf, (pile[0].x, pile[0].y))
-        #pygame.draw.rect(
-         #   screen, BROWN, (pile[0].x, pile[0].y, pile[0].width, pile[0].height))
+        # pygame.draw.rect(
+        #   screen, BROWN, (pile[0].x, pile[0].y, pile[0].width, pile[0].height))
         numText = font.render(str(pile[1]), True, WHITE)
         screen.blit(numText, (pile[0].x, pile[0].y))
 
@@ -157,7 +157,7 @@ def main():
             bob.turn_left()
         if keys[pygame.K_e]:
             bob.turn_right()
-            
+
         pygame.draw.circle(screen, BROWN, (BASEX, BASEY), BASERAD)
 
         scoreText = font.render(str(score), True, WHITE, BROWN)
@@ -203,9 +203,13 @@ def main():
                 game_over_text.get_width() // 2, HEIGHT // 2 - 50))
     screen.blit(score_text, (WIDTH // 2 -
                 score_text.get_width() // 2, HEIGHT // 2 + 10))
-    pygame.display.flip()
+    ending = True
+    while ending:
+        pygame.display.flip()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                ending = False
 
-    pygame.time.wait(10000)
     pygame.quit()
 
 
