@@ -2,7 +2,6 @@ import random
 import pygame
 import math
 
-
 class Mob:
     def __init__(self, name, center, radius, speed):
         self.name = name
@@ -17,6 +16,21 @@ class Mob:
                      random.uniform(self.center[1] - self.radius, self.center[1] + self.radius - 3))
         self.next_hunt = 0
 
+        self.sheet = pygame.image.load("MouseRun.png")
+        self.frame = 0
+        self.oldTicks = pygame.time.get_ticks()
+        self.isLeft = False
+
+    def get_image(self, width, height, scale, screen, colour):
+        image = pygame.Surface((width, height)).convert_alpha()
+        image.blit(self.sheet, (0, 0), (10,(self.frame * height) + 10, width, height))
+        image = pygame.transform.scale(image, (width * scale, height * scale))
+
+        if self.isLeft:
+            image = pygame.transform.flip(image, True, False)
+        image.set_colorkey(colour)
+        return image
+    
     def update(self, ants):
         if any(self.is_ant_inside(ant.x, ant.y) for ant in ants) and pygame.time.get_ticks() > self.next_hunt:
 
@@ -47,6 +61,12 @@ class Mob:
                 dx, dy = dx / distance * self.speed, dy / distance * self.speed
                 self.x += dx
                 self.y += dy
+
+
+            if dx < 0:
+                self.isLeft = True
+            else:
+                self.isLeft = False
 
     def track_target(self):
         if self.target:
@@ -88,8 +108,15 @@ class Mob:
             self.target = None
 
     def draw(self, screen):
-        pygame.draw.circle(screen, (255, 255, 0), (int(
-            self.x), int(self.y)), 5)
+        if pygame.time.get_ticks() - self.oldTicks > 200:
+            self.oldTicks = pygame.time.get_ticks()
+            self.frame+= 2
+            if self.frame > 10: self.frame = 0
+
+        screen.blit(self.get_image(16,16,4, screen, (0,0,0)),(int(
+        self.x), int(self.y)))
+        #pygame.draw.circle(screen, (255, 255, 0), (int(
+            #self.x), int(self.y)), 5)
 
     def debug(self, screen):
         pygame.draw.circle(screen, (0, 255, 0), (int(
