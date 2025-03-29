@@ -30,6 +30,7 @@ CIRCLE_COLOR = (0, 255, 0)
 GREEN = (55, 153, 35)
 BROWN = (77, 39, 39)
 NUM_ANTS = 5
+NUM_MOBS = 5
 
 # Initialize screen
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -118,6 +119,17 @@ def main():
     for i, ant in enumerate(ants[:-1]):
         ant.in_trail = ants[i+1]
 
+    mobs = []
+
+    for i in range(NUM_MOBS):
+        x, y = random.randint(0, WIDTH), random.randint(0, HEIGHT)
+        distance = math.sqrt((x - 50) ** 2 + (y - 50) ** 2)
+        # Scale speed with distance, minimum speed is 1
+        speed = max(1, distance / 1000)
+        radius = random.randint(30, 100)
+        mobs.append(Mob(i, (x, y), radius, speed=speed))
+
+
     while running:
         # Clear screen
         screen.fill(GREEN)
@@ -144,11 +156,16 @@ def main():
         bob.draw(screen)
         for ant in ants[1:]:
             ant.look_at_lead()
-            print(ant.distance_to_lead())
             if ant.distance_to_lead() > 30:
                 ant.move_forward()
-            ant.draw(screen)
+            if ant.alive:
+                ant.draw(screen)
             # Update display
+
+        for mob in mobs:
+            mob.update(ants)
+            mob.debug(screen)
+            mob.draw(screen)
 
         pickUpLeaves(ants, leafPiles)
         prevScore = score
