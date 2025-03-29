@@ -1,6 +1,7 @@
 import pygame
 import random
 import sys
+import math
 
 # Initialize Pygame
 pygame.init()
@@ -8,14 +9,18 @@ pygame.init()
 # Screen dimensions
 WIDTH, HEIGHT = 800, 600
 
+
+#Game variables
+BASEX = 0
+BASEY = 0
+LEAFMULTIPLIER = 0.05
+
+
 # Colors
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
-CIRCLE_COLOR = (0, 255, 0)
-
-# Circle properties
-CIRCLE_RADIUS = 20
-CIRCLE_SPEED = 5
+GREEN = (55,153,35)
+BROWN = (77,39,39)
 
 # Initialize screen
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -23,21 +28,55 @@ pygame.display.set_caption("Game Jam")  # TODO : Change lol
 
 # Clock for controlling frame rate
 clock = pygame.time.Clock()
-
-# List to store circles
-circles = []
+#
 
 
-def create_circle():
-    x = random.randint(CIRCLE_RADIUS, WIDTH - CIRCLE_RADIUS)
-    y = -CIRCLE_RADIUS  # Start above the screen
-    return {"x": x, "y": y}
+def spawnLeaves(leafPiles):
+    """ Return leafPiles"""
+    x = random.randint(10,WIDTH)
+    y = random.randint(10, HEIGHT)
+
+    distFromBase = math.sqrt((abs(BASEX - x)**2) + (abs(BASEY-y)**2))
+    numLeaves = int(distFromBase * LEAFMULTIPLIER)
+
+    leafPiles += [{"x": x, "y":y, "leaves": numLeaves}]
+
+    return leafPiles
+
+def drawLeaves(leafPiles):
+
+    font = pygame.font.Font('freesansbold.ttf', 20)
+    for pile in leafPiles:
+        
+        pygame.draw.rect(screen, BROWN, (pile["x"], pile["y"], pile["leaves"], pile["leaves"]))
+        numText = font.render(str(pile["leaves"]), True, WHITE, BROWN)
+        screen.blit(numText, (pile["x"], pile["y"]))
+
+def pickUpLeaves():
+    # Get collision
+    #Sub number of ants from number of leaves
+    #update number of leaves carrying
+    pass
+
+
+def depositLeaves():
+    #on collision with base
+    #number of leaves carrying = 0
+    #score += number of leaves
+    pass
+
 
 # Main game loop
 
-
 def main():
+    
+    leafPiles = []
+    #Spawn intital leaves
+    for i in range(10):
+        leafPiles += spawnLeaves(leafPiles)
+
     running = True
+
 
     while running:
         # Handle events
@@ -46,23 +85,12 @@ def main():
                 running = False
 
         # Clear screen
-        screen.fill(BLACK)
+        screen.fill(GREEN)
 
-        # Add new circles randomly
-        if random.random() < 0.02:  # Adjust probability for more/less circles
-            circles.append(create_circle())
 
-        # Update and draw circles
-        for circle in circles:
-            circle["y"] += CIRCLE_SPEED
-            pygame.draw.circle(screen, CIRCLE_COLOR,
-                               (circle["x"], circle["y"]), CIRCLE_RADIUS)
-
-        # Remove circles that move off the screen
-        circles[:] = [circle for circle in circles if circle["y"] -
-                      CIRCLE_RADIUS < HEIGHT]
 
         # Update display
+        drawLeaves(leafPiles)
         pygame.display.flip()
 
         # Cap the frame rate
