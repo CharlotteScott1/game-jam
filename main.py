@@ -49,7 +49,7 @@ def spawnLeaves(leafPiles):
     distFromBase = math.sqrt((abs(BASEX - x)**2) + (abs(BASEY-y)**2))
     numLeaves = int(distFromBase * LEAFMULTIPLIER)
 
-    leafPiles += [pygame.Rect(x, y, numLeaves, numLeaves)]
+    leafPiles += [[pygame.Rect(x, y, max(numLeaves*2, 30), max(numLeaves*2, 30)), numLeaves]]
 
     return leafPiles
 
@@ -58,22 +58,23 @@ def drawLeaves(leafPiles):
 
     for pile in leafPiles:
         pygame.draw.rect(
-            screen, BROWN, (pile.x, pile.y, pile.width, pile.height))
-        numText = font.render(str(pile.height), True, WHITE, BROWN)
-        screen.blit(numText, (pile.x, pile.y))
+            screen, BROWN, (pile[0].x, pile[0].y, pile[0].width, pile[0].height))
+        numText = font.render(str(pile[1]), True, WHITE, BROWN)
+        screen.blit(numText, (pile[0].x, pile[0].y))
 
 
 def pickUpLeaves(ants, leafPiles):
     toPop = []
     for ant in ants:
         if not ant.isCarrying:
-            if pygame.Rect.collidelist(pygame.Rect(ant.x, ant.y, 20, 30), leafPiles):
+            if pygame.Rect.collidelist(pygame.Rect(ant.x, ant.y, 20, 30), list(map(lambda x: x[0],leafPiles))):
                 for leaf in leafPiles:
-                    if pygame.Rect.colliderect(pygame.Rect(ant.x, ant.y, 20, 30), leaf):
-                        leaf.width -= 1
-                        leaf.height -= 1
+                    if pygame.Rect.colliderect(pygame.Rect(ant.x, ant.y, 20, 30), leaf[0]):
+                        leaf[0].width -= 2
+                        leaf[0].height -= 2
+                        leaf[1] -= 1
 
-                        if leaf.width < 1:
+                        if leaf[1] < 1:
                             toPop += [leaf]
 
                         ant.isCarrying = True
