@@ -30,7 +30,7 @@ CIRCLE_COLOR = (0, 255, 0)
 GREEN = (55, 153, 35)
 BROWN = (77, 39, 39)
 NUM_ANTS = 5
-NUM_MOBS = 5
+NUM_MOBS = 14
 
 # Initialize screen
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -43,8 +43,8 @@ clock = pygame.time.Clock()
 
 def spawnLeaves(leafPiles):
     """ Return leafPiles"""
-    x = random.randint(50, WIDTH-50)
-    y = random.randint(50, HEIGHT-30)
+    x = random.randint(50+BASERAD, WIDTH-50)
+    y = random.randint(50+BASERAD, HEIGHT-30)
 
     distFromBase = math.sqrt((abs(BASEX - x)**2) + (abs(BASEY-y)**2))
     numLeaves = int(distFromBase * LEAFMULTIPLIER)
@@ -124,11 +124,12 @@ def main():
     mobs = []
 
     for i in range(NUM_MOBS):
-        x, y = random.randint(0, WIDTH), random.randint(0, HEIGHT)
+        radius = random.randint(30, 100)
+        x, y = random.randint(
+            50+radius+BASERAD, WIDTH), random.randint(50+radius+BASERAD, HEIGHT)
         distance = math.sqrt((x - 50) ** 2 + (y - 50) ** 2)
         # Scale speed with distance, minimum speed is 1
         speed = max(1, distance / 1000)
-        radius = random.randint(30, 100)
         mobs.append(Mob(i, (x, y), radius, speed=speed))
 
     while running:
@@ -165,7 +166,6 @@ def main():
 
         for mob in mobs:
             mob.update(ants)
-            mob.debug(screen)
             mob.draw(screen)
 
         if not bob.alive:
