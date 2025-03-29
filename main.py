@@ -49,7 +49,8 @@ def spawnLeaves(leafPiles):
     distFromBase = math.sqrt((abs(BASEX - x)**2) + (abs(BASEY-y)**2))
     numLeaves = int(distFromBase * LEAFMULTIPLIER)
 
-    leafPiles += [[pygame.Rect(x, y, max(numLeaves*2, 30), max(numLeaves*2, 30)), numLeaves]]
+    leafPiles += [[pygame.Rect(x, y, max(numLeaves*2, 30),
+                               max(numLeaves*2, 30)), numLeaves]]
 
     return leafPiles
 
@@ -67,7 +68,7 @@ def pickUpLeaves(ants, leafPiles):
     toPop = []
     for ant in ants:
         if not ant.isCarrying:
-            if pygame.Rect.collidelist(pygame.Rect(ant.x, ant.y, 20, 30), list(map(lambda x: x[0],leafPiles))):
+            if pygame.Rect.collidelist(pygame.Rect(ant.x, ant.y, 20, 30), list(map(lambda x: x[0], leafPiles))):
                 for leaf in leafPiles:
                     if pygame.Rect.colliderect(pygame.Rect(ant.x, ant.y, 20, 30), leaf[0]):
                         leaf[0].width -= 2
@@ -130,7 +131,6 @@ def main():
         radius = random.randint(30, 100)
         mobs.append(Mob(i, (x, y), radius, speed=speed))
 
-
     while running:
         # Clear screen
         screen.fill(GREEN)
@@ -167,6 +167,9 @@ def main():
             mob.update(ants)
             mob.debug(screen)
             mob.draw(screen)
+
+        if not bob.alive:
+            bob = bob.in_trail
 
         pickUpLeaves(ants, leafPiles)
         prevScore = score

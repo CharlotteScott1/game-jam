@@ -43,7 +43,7 @@ class Ant:
         if self.isCarrying:
             ant_color = (0, 255, 0)
         else:
-            ant_color = (0, 0,0)  # Black color for the ant
+            ant_color = (0, 0, 0)  # Black color for the ant
         rotated_surface = pygame.Surface((20, 10), pygame.SRCALPHA)
         pygame.draw.ellipse(rotated_surface, ant_color, (0, 0, 20, 10))
         rotated_surface = pygame.transform.rotate(
@@ -76,6 +76,8 @@ class Ant:
     def remove(self):
         """Remove this ant from the chain."""
         print(f"{self.id}, has died :(")
+        if self.player_controlled:
+            print("AH, problem")
 
         if self.following:
             self.following.in_trail = self.in_trail
@@ -85,4 +87,3 @@ class Ant:
 
         self.following = None
         self.alive = False
-
