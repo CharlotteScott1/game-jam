@@ -136,6 +136,11 @@ def main():
         # Clear screen
         screen.fill(GREEN)
         # Handle events
+
+        if len(ants) < 1 and not bob:
+            print("Oh dear")
+            running = False
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False

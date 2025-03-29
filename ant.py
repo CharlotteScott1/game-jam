@@ -75,9 +75,6 @@ class Ant:
 
     def remove(self):
         """Remove this ant from the chain."""
-        print(f"{self.id}, has died :(")
-        if self.player_controlled:
-            print("AH, problem")
 
         if self.following:
             self.following.in_trail = self.in_trail

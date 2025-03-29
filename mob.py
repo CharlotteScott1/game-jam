@@ -59,7 +59,6 @@ class Mob:
                 self.y += dy
 
     def check_collision_with_target(self):
-        print(self.target.id)
         if self.target:
             dx, dy = self.target.x - self.x, self.target.y - self.y
             distance = math.sqrt(dx**2 + dy**2)
