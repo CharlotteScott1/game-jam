@@ -138,9 +138,9 @@ def main():
         screen.fill(GREEN)
         # Handle events
 
-        if len(ants) < 1 and not bob:
-            print("Oh dear")
+        if not bob:
             running = False
+            break
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -192,8 +192,18 @@ def main():
         # Cap the frame rate
         clock.tick(60)
 
+    # Game over screen
+    screen.fill(BLACK)
+    game_over_text = font.render("Game Over", True, WHITE)
+    score_text = font.render(f"Score: {score}", True, WHITE)
+    screen.blit(game_over_text, (WIDTH // 2 -
+                game_over_text.get_width() // 2, HEIGHT // 2 - 50))
+    screen.blit(score_text, (WIDTH // 2 -
+                score_text.get_width() // 2, HEIGHT // 2 + 10))
+    pygame.display.flip()
+
+    pygame.time.wait(10000)
     pygame.quit()
-    sys.exit()
 
 
 if __name__ == "__main__":
