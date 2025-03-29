@@ -38,7 +38,7 @@ class Ant:
         if self.isCarrying:
             ant_color = (0,255,0)
         else:
-            ant_color = (255, 0, 0)  # Red color for the ant
+            ant_color = (0, 0,0)  # Black color for the ant
         rotated_surface = pygame.Surface((20, 10), pygame.SRCALPHA)
         pygame.draw.ellipse(rotated_surface, ant_color, (0, 0, 20, 10))
         rotated_surface = pygame.transform.rotate(
