@@ -58,9 +58,13 @@ def spawnLeaves(leafPiles):
 def drawLeaves(leafPiles):
 
     for pile in leafPiles:
-        pygame.draw.rect(
-            screen, BROWN, (pile[0].x, pile[0].y, pile[0].width, pile[0].height))
-        numText = font.render(str(pile[1]), True, WHITE, BROWN)
+        
+        leaf = pygame.image.load("leavesResized.png")
+        leaf = pygame.transform.scale(leaf, (pile[0].width, pile[0].height))
+        screen.blit(leaf, (pile[0].x, pile[0].y))
+        #pygame.draw.rect(
+         #   screen, BROWN, (pile[0].x, pile[0].y, pile[0].width, pile[0].height))
+        numText = font.render(str(pile[1]), True, WHITE)
         screen.blit(numText, (pile[0].x, pile[0].y))
 
 
@@ -110,7 +114,6 @@ def main():
     score = 0
     for i in range(10):
         leafPiles = spawnLeaves(leafPiles)
-
     running = True
 
     bob = Ant("Bob", player_controlled=True)
@@ -154,7 +157,7 @@ def main():
             bob.turn_left()
         if keys[pygame.K_e]:
             bob.turn_right()
-
+            
         pygame.draw.circle(screen, BROWN, (BASEX, BASEY), BASERAD)
 
         scoreText = font.render(str(score), True, WHITE, BROWN)

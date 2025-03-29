@@ -108,7 +108,7 @@ class Mob:
             self.target = None
 
     def draw(self, screen):
-        if pygame.time.get_ticks() - self.oldTicks > 200:
+        if pygame.time.get_ticks() - self.oldTicks > 100:
             self.oldTicks = pygame.time.get_ticks()
             self.frame+= 2
             if self.frame > 10: self.frame = 0

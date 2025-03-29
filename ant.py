@@ -51,13 +51,6 @@ class Ant:
         rect = rotated_surface.get_rect(center=(self.x, self.y))
         screen.blit(rotated_surface, rect.topleft)
 
-        # Draw a line facing forward
-        forward_length = 20
-        radians = math.radians(-self.heading)
-        end_x = self.x + forward_length * math.cos(radians)
-        end_y = self.y - forward_length * math.sin(radians)
-        pygame.draw.line(screen, (0, 255, 0),
-                         (self.x, self.y), (end_x, end_y), 2)
 
     def look_at_lead(self):
         """Update the position of the next ant in the sequence"""
