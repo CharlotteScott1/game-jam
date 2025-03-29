@@ -29,7 +29,7 @@ WHITE = (255, 255, 255)
 CIRCLE_COLOR = (0, 255, 0)
 GREEN = (55, 153, 35)
 BROWN = (77, 39, 39)
-NUM_ANTS = 50
+NUM_ANTS = 8
 NUM_MOBS = 14
 
 # Initialize screen
