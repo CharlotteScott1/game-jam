@@ -3,14 +3,16 @@ import math
 
 
 class Ant:
-    def __init__(self, x=400, y=400, following=None, player_controlled=False):
+    def __init__(self, x=50, y=50, following=None, player_controlled=False):
         """Initialize the ant's position."""
         self.x = x
         self.y = y
         self.heading = 0
-        self.speed = 1
+        self.speed = 2
         self.following: Ant = following
         self.player_controlled = player_controlled
+
+        self.isCarrying = False
 
     def move_forward(self):
         """Move the ant forward based on its heading."""
@@ -32,21 +34,17 @@ class Ant:
 
     def draw(self, screen):
         """Draw the ant's current position using pygame."""
-        ant_color = (255, 0, 0)  # Red color for the ant
+
+        if self.isCarrying:
+            ant_color = (0,255,0)
+        else:
+            ant_color = (255, 0, 0)  # Red color for the ant
         rotated_surface = pygame.Surface((20, 10), pygame.SRCALPHA)
         pygame.draw.ellipse(rotated_surface, ant_color, (0, 0, 20, 10))
         rotated_surface = pygame.transform.rotate(
             rotated_surface, -self.heading)
         rect = rotated_surface.get_rect(center=(self.x, self.y))
         screen.blit(rotated_surface, rect.topleft)
-
-        # Draw a line facing forward
-        forward_length = 20
-        radians = math.radians(-self.heading)
-        end_x = self.x + forward_length * math.cos(radians)
-        end_y = self.y - forward_length * math.sin(radians)
-        pygame.draw.line(screen, (0, 255, 0),
-                         (self.x, self.y), (end_x, end_y), 2)
 
     def look_at_lead(self):
         """Update the position of the next ant in the sequence"""
