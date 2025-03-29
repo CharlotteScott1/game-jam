@@ -141,7 +141,7 @@ def main():
         screen.fill(GREEN)
         # Handle events
 
-        if not bob:
+        if len(ants) < 1 or not bob:
             running = False
             break
 
@@ -180,7 +180,10 @@ def main():
 
         if not bob.alive:
             bob = bob.in_trail
-            bob.player_controlled = True
+            if bob:
+                bob.player_controlled = True
+            else:
+                break
 
         pickUpLeaves(ants, leafPiles)
         prevScore = score
