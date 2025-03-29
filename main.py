@@ -49,7 +49,7 @@ def spawnLeaves(leafPiles):
     distFromBase = math.sqrt((abs(BASEX - x)**2) + (abs(BASEY-y)**2))
     numLeaves = int(distFromBase * LEAFMULTIPLIER)
 
-    leafPiles += [[pygame.Rect(x, y, max(numLeaves*2, 30),
+    leafPiles += [[pygame.Rect(x, y, max(numLeaves*2.5, 30),
                                max(numLeaves*2, 30)), numLeaves]]
 
     return leafPiles
