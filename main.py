@@ -81,8 +81,9 @@ def pickUpLeaves(ants, leafPiles):
                         break
 
     for leaf in toPop:
-        leafPiles.remove(leaf)
-        leafPiles = spawnLeaves(leafPiles)
+        if leaf in leafPiles:
+            leafPiles.remove(leaf)
+            leafPiles = spawnLeaves(leafPiles)
 
 
 def depositLeaves(ants, score):
