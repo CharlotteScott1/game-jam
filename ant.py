@@ -3,12 +3,12 @@ import math
 
 
 class Ant:
-    def __init__(self, x=50, y=50, following=None, player_controlled=False):
+    def __init__(self, x=150, y=150, following=None, player_controlled=False):
         """Initialize the ant's position."""
         self.x = x
         self.y = y
         self.heading = 0
-        self.speed = 2
+        self.speed = 1
         self.following: Ant = following
         self.player_controlled = player_controlled
 
