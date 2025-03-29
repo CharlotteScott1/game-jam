@@ -2,6 +2,7 @@ import pygame
 import random
 import sys
 from ant import Ant
+from mob import Mob
 import math
 
 # Initialize Pygame
@@ -10,7 +11,11 @@ pygame.init()
 # Screen dimensions
 WIDTH, HEIGHT = 800, 600
 
-#fonts
+
+# Game variables
+BASEX = 0
+BASEY = 0
+# fonts
 font = pygame.font.Font('freesansbold.ttf', 20)
 # Game variables
 BASEX = 150
@@ -51,7 +56,6 @@ def spawnLeaves(leafPiles):
 def drawLeaves(leafPiles):
 
     for pile in leafPiles:
-
         pygame.draw.rect(
             screen, BROWN, (pile.x, pile.y, pile.width, pile.height))
         numText = font.render(str(pile.height), True, WHITE, BROWN)
@@ -73,10 +77,11 @@ def pickUpLeaves(ants, leafPiles):
 
                         ant.isCarrying = True
                         break
-    
+
     for leaf in toPop:
         leafPiles.remove(leaf)
         leafPiles = spawnLeaves(leafPiles)
+
 
 def depositLeaves(ants, score):
     """returns score"""
@@ -86,12 +91,10 @@ def depositLeaves(ants, score):
 
     for ant in ants:
         if ant.isCarrying:
-            if math.sqrt((abs(ant.x - BASEX) **2)+(abs(ant.y - BASEY)**2)) < BASERAD:
+            if math.sqrt((abs(ant.x - BASEX) ** 2)+(abs(ant.y - BASEY)**2)) < BASERAD:
                 ant.isCarrying = False
                 score += 1
     return score
-
-    
 
 
 # Main game loop
@@ -99,17 +102,21 @@ def depositLeaves(ants, score):
 def main():
 
     leafPiles = []
+    # Spawn initial leaves
     score = 0
-    # Spawn intital leaves
     for i in range(10):
         leafPiles = spawnLeaves(leafPiles)
 
     running = True
 
-    bob = Ant(player_controlled=True)
+    bob = Ant("Bob", player_controlled=True)
     ants = [bob]
+
     for i in range(NUM_ANTS):
-        ants.append(Ant(following=ants[i]))
+        ants.append(Ant(i, following=ants[i]))
+
+    for i, ant in enumerate(ants[:-1]):
+        ant.in_trail = ants[i+1]
 
     while running:
         # Clear screen
@@ -143,15 +150,15 @@ def main():
             ant.draw(screen)
             # Update display
 
-
         pickUpLeaves(ants, leafPiles)
         prevScore = score
         score = depositLeaves(ants, score)
 
-        for i in range((score //5) - (prevScore//5)):
-            newAnt = Ant(following = ants[-1])
+        for i in range((score // 5) - (prevScore//5)):
+            newAnt = Ant(len(ants)-1, following=ants[-1])
+            ants[-1].in_trail = newAnt
             ants += [newAnt]
-        
+
         # Update display
         pygame.display.flip()
 
