@@ -13,8 +13,8 @@ WIDTH, HEIGHT = 800, 600
 #fonts
 font = pygame.font.Font('freesansbold.ttf', 20)
 # Game variables
-BASEX = 50
-BASEY = 50
+BASEX = 150
+BASEY = 150
 BASERAD = 45
 LEAFMULTIPLIER = 0.05
 
@@ -37,8 +37,8 @@ clock = pygame.time.Clock()
 
 def spawnLeaves(leafPiles):
     """ Return leafPiles"""
-    x = random.randint(10, WIDTH)
-    y = random.randint(10, HEIGHT)
+    x = random.randint(50, WIDTH-50)
+    y = random.randint(50, HEIGHT-30)
 
     distFromBase = math.sqrt((abs(BASEX - x)**2) + (abs(BASEY-y)**2))
     numLeaves = int(distFromBase * LEAFMULTIPLIER)
@@ -59,19 +59,24 @@ def drawLeaves(leafPiles):
 
 
 def pickUpLeaves(ants, leafPiles):
-
+    toPop = []
     for ant in ants:
         if not ant.isCarrying:
-            if pygame.Rect.collidelist(pygame.Rect(ant.x, ant.y, 10, 20), leafPiles):
+            if pygame.Rect.collidelist(pygame.Rect(ant.x, ant.y, 20, 30), leafPiles):
                 for leaf in leafPiles:
-                    if pygame.Rect.colliderect(pygame.Rect(ant.x, ant.y, 10, 20), leaf):
+                    if pygame.Rect.colliderect(pygame.Rect(ant.x, ant.y, 20, 30), leaf):
                         leaf.width -= 1
                         leaf.height -= 1
+
+                        if leaf.width < 1:
+                            toPop += [leaf]
 
                         ant.isCarrying = True
                         break
     
-
+    for leaf in toPop:
+        leafPiles.remove(leaf)
+        leafPiles = spawnLeaves(leafPiles)
 
 def depositLeaves(ants, score):
     """returns score"""
@@ -97,7 +102,7 @@ def main():
     score = 0
     # Spawn intital leaves
     for i in range(10):
-        leafPiles += spawnLeaves(leafPiles)
+        leafPiles = spawnLeaves(leafPiles)
 
     running = True
 
@@ -140,7 +145,13 @@ def main():
 
 
         pickUpLeaves(ants, leafPiles)
+        prevScore = score
         score = depositLeaves(ants, score)
+
+        for i in range((score //5) - (prevScore//5)):
+            newAnt = Ant(following = ants[-1])
+            ants += [newAnt]
+        
         # Update display
         pygame.display.flip()
 
