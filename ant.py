@@ -18,6 +18,14 @@ class Ant:
 
         self.isCarrying = False
 
+        self.leaf_image = pygame.image.load("leaf.png")
+        self.leaf_image = pygame.transform.scale(self.leaf_image, (15, 15))
+        self.leaf_image = pygame.transform.rotate(self.leaf_image, 180)
+        self.leaf_image = self.leaf_image.convert_alpha()
+
+        self.ant_image = pygame.image.load("ant.png")
+        self.ant_image = pygame.transform.scale(self.ant_image, (25, 25))
+
     def move_forward(self):
         """Move the ant forward based on its heading."""
         radians = math.radians(-self.heading)
@@ -39,30 +47,17 @@ class Ant:
     def draw(self, screen):
         """Draw the ant's current position."""
 
-        ant_image = pygame.image.load("ant.png")
-        ant_image = pygame.transform.scale(ant_image, (25, 25))
-        ant_image = ant_image.convert_alpha()
-
-        # Change the color of the PNG
-        colorized_image = pygame.Surface(ant_image.get_size(), pygame.SRCALPHA)
-        colorized_image.fill((255, 0, 0))
-        ant_image.blit(colorized_image, (0, 0),
-                       special_flags=pygame.BLEND_RGBA_MULT)
-
-        rotated_image = pygame.transform.rotate(ant_image, -self.heading - 90)
+        rotated_image = pygame.transform.rotate(
+            self.ant_image, -self.heading - 90)
         rect = rotated_image.get_rect(center=(self.x, self.y))
         screen.blit(rotated_image, rect.topleft)
 
         # If the ant is carrying something, draw a leaf nearby
         if self.isCarrying:
-            leaf_image = pygame.image.load("leaf.png")
-            leaf_image = pygame.transform.scale(leaf_image, (15, 15))
-            leaf_image = pygame.transform.rotate(leaf_image, 180)
-            leaf_image = leaf_image.convert_alpha()
 
             # Position the leaf slightly above the ant
-            leaf_rect = leaf_image.get_rect(center=(self.x, self.y - 20))
-            screen.blit(leaf_image, leaf_rect.topleft)
+            leaf_rect = self.leaf_image.get_rect(center=(self.x, self.y - 20))
+            screen.blit(self.leaf_image, leaf_rect.topleft)
 
     def look_at_lead(self):
         """Update the position of the next ant in the sequence"""
