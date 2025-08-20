@@ -1,5 +1,5 @@
 # game-jam
-UoY 2025 game-jam
+UoY 2025 game-jam, made within 5 hours.
 
 
 ## Attributions
